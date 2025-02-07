@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
-  <artifactId>IndieProject</artifactId>
+  <artifactId>recipeStore</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>IndieProject Maven Webapp</name>
+  <name>Recipe Store Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
   <url>http://maven.apache.org</url>
 
@@ -80,7 +80,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>IndieProject</finalName>
+    <finalName>recipeStore</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
