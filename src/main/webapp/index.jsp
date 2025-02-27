@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2><%= "Recipe Store" %></h2>
+<h2>Welcome!</h2>
 </body>
 </html>
