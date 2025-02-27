@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://localhost:3306/bookseller</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/recipe_store</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
         <property name="connection.username">root</property>
@@ -16,9 +16,8 @@
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
 
-        <mapping class="edu.matc.entity.Book" />
-        <!--Add mapping for the Author class-->
-        <mapping class="edu.matc.entity.Author" />
+        <mapping class="com.jingjiegao.rs.entity.User" />
+        <mapping class="com.jingjiegao.rs.entity.Recipe" />
 
     </session-factory>
 
