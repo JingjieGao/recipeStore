@@ -1,5 +1,6 @@
 package com.jingjiegao.rs.persistence;
 
+import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.util.Database;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * The type Author dao test.
  */
-class UserDaoTest {
+class RecipeDaoTest {
     /**
      * The Author dao.
      */
-    UserDao userDao;
+    RecipeDao recipeDao;
 
     /**
      * Sets up.
@@ -25,6 +26,7 @@ class UserDaoTest {
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
+        recipeDao = new RecipeDao();
     }
 
     /**
@@ -32,10 +34,10 @@ class UserDaoTest {
      */
     @Test
     void getById() {
-        userDao = new UserDao();
-        User retrievedUser = userDao.getById(1);
-        assertNotNull(retrievedUser);
-        assertEquals("Jane", retrievedUser.getFirstName());
+        Recipe retrievedRecipe = recipeDao.getById(1);
+        assertNotNull(retrievedRecipe);
+        assertEquals("Chicken Curry", retrievedRecipe.getName());
+        assertEquals(1, retrievedRecipe.getId());
     }
 
     /**
@@ -43,14 +45,11 @@ class UserDaoTest {
      */
     @Test
     void update() {
-        userDao = new UserDao();
-        User userToUpdate = userDao.getById(1);
-        userToUpdate.setLastName("LastNameForTest");
-        userDao.update(userToUpdate);
-
-        // retrieve the user and check that the name change worked
-        User actualUser = userDao.getById(1);
-        assertEquals("LastNameForTest", actualUser.getLastName());
+        Recipe recipe = recipeDao.getById(2);
+        recipe.setName("For test");
+        recipeDao.update(recipe);
+        Recipe retrievedRecipe = recipeDao.getById(2);
+        assertEquals("For test", retrievedRecipe.getName());
     }
 
     /**
@@ -58,12 +57,23 @@ class UserDaoTest {
      */
     @Test
     void insert() {
-        userDao = new UserDao();
-        User userToInsert = new User("Kia", "Yang","kia@example.com","password111");
-        int insertedUserId = userDao.insert(userToInsert);
-        assertNotEquals(0, insertedUserId);
-        User insertedUser = userDao.getById(insertedUserId);
-        assertEquals("Kia", insertedUser.getFirstName());
+        UserDao userDao = new UserDao();
+        User user = userDao.getById(1);
+        assertNotNull(user, "user is null");
+        Recipe recipe = new Recipe();
+        recipe.setUser(user);
+        recipe.setName("For test");
+        recipe.setCategory("For test");
+        recipe.setIngredients("For test");
+        recipe.setInstructions("For test");
+
+        int insertedRecipeId = recipeDao.insert(recipe);
+
+        Recipe retrievedRecipe = recipeDao.getById(insertedRecipeId);
+
+        assertNotNull(retrievedRecipe);
+        assertEquals(recipe.getCategory(), retrievedRecipe.getCategory());
+        assertEquals("For test", retrievedRecipe.getName());
     }
 
     /**
@@ -71,9 +81,8 @@ class UserDaoTest {
      */
     @Test
     void delete() {
-        userDao = new UserDao();
-        userDao.delete(userDao.getById(2));
-        assertNull(userDao.getById(2));
+        recipeDao.delete(recipeDao.getById(3));
+        assertNull(recipeDao.getById(3));
     }
 
     /**
@@ -81,29 +90,7 @@ class UserDaoTest {
      */
     @Test
     void getAll() {
-        userDao = new UserDao();
-        List<User> users = userDao.getAll();
-        assertEquals(3, users.size());
-    }
-
-    /**
-     * Gets by property equal.
-     */
-    @Test
-    void getByPropertyEqual() {
-        userDao = new UserDao();
-        List<User> users = userDao.getByPropertyLike("lastName", "Gao");
-        assertEquals(1, users.size());
-        assertEquals(1, users.get(0).getId());
-    }
-
-    /**
-     * Gets by property like.
-     */
-    @Test
-    void getByPropertyLike() {
-        userDao = new UserDao();
-        List<User> users = userDao.getByPropertyLike("lastName", "G");
-        assertEquals(1, users.size());
+        List<Recipe> recipes = recipeDao.getAll();
+        assertEquals(3, recipes.size());
     }
 }
