@@ -1,8 +1,11 @@
-package edu.matc.util;
+package com.jingjiegao.rs.util;
 
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * The type Database properties loader.
+ */
 public class DatabasePropertiesLoader implements PropertiesLoader {
     @Override
     public Properties loadProperties() {
