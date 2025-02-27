@@ -1,20 +1,22 @@
-package edu.matc.persistence;
+package com.jingjiegao.rs.persistence;
 
+import com.jingjiegao.rs.entity.User;
+import com.jingjiegao.rs.util.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import edu.matc.testUtils.Database;
-import edu.matc.entity.Author;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The type Author dao test.
  */
-class AuthorDaoTest {
+class UserDaoTest {
     /**
      * The Author dao.
      */
-    AuthorDao authorDao;
+    UserDao userDao;
 
     /**
      * Sets up.
@@ -30,10 +32,10 @@ class AuthorDaoTest {
      */
     @Test
     void getById() {
-        authorDao = new AuthorDao();
-        Author retrievedAuthor = authorDao.getById(1);
-        assertNotNull(retrievedAuthor);
-        assertEquals("Kathy", retrievedAuthor.getFirstName());
+        userDao = new UserDao();
+        User retrievedUser = userDao.getById(1);
+        assertNotNull(retrievedUser);
+        assertEquals("Jane", retrievedUser.getFirstName());
     }
 
     /**
@@ -41,14 +43,14 @@ class AuthorDaoTest {
      */
     @Test
     void update() {
-        authorDao = new AuthorDao();
-        Author authorToUpdate = authorDao.getById(1);
-        authorToUpdate.setLastName("LastNameForTest");
-        authorDao.update(authorToUpdate);
+        userDao = new UserDao();
+        User userToUpdate = userDao.getById(1);
+        userToUpdate.setLastName("LastNameForTest");
+        userDao.update(userToUpdate);
 
-        // retrieve the author and check that the name change worked
-        Author actualAuthor = authorDao.getById(1);
-        assertEquals("LastNameForTest", actualAuthor.getLastName());
+        // retrieve the user and check that the name change worked
+        User actualUser = userDao.getById(1);
+        assertEquals("LastNameForTest", actualUser.getLastName());
     }
 
     /**
@@ -56,12 +58,12 @@ class AuthorDaoTest {
      */
     @Test
     void insert() {
-        authorDao = new AuthorDao();
-        Author authorToInsert = new Author("Kia", "Yang");
-        int insertedAuthorId = authorDao.insert(authorToInsert);
-        assertNotEquals(0, insertedAuthorId);
-        Author insertedAuthor = authorDao.getById(insertedAuthorId);
-        assertEquals("Kia", insertedAuthor.getFirstName());
+        userDao = new UserDao();
+        User userToInsert = new User("Kia", "Yang","kia@example.com","password111");
+        int insertedUserId = userDao.insert(userToInsert);
+        assertNotEquals(0, insertedUserId);
+        User insertedUser = userDao.getById(insertedUserId);
+        assertEquals("Kia", insertedUser.getFirstName());
     }
 
     /**
@@ -69,9 +71,9 @@ class AuthorDaoTest {
      */
     @Test
     void delete() {
-        authorDao = new AuthorDao();
-        authorDao.delete(authorDao.getById(2));
-        assertNull(authorDao.getById(2));
+        userDao = new UserDao();
+        userDao.delete(userDao.getById(2));
+        assertNull(userDao.getById(2));
     }
 
     /**
@@ -79,9 +81,9 @@ class AuthorDaoTest {
      */
     @Test
     void getAll() {
-        authorDao = new AuthorDao();
-        List<Author> authors = authorDao.getAll();
-        assertEquals(3, authors.size());
+        userDao = new UserDao();
+        List<User> users = userDao.getAll();
+        assertEquals(3, users.size());
     }
 
     /**
@@ -89,10 +91,10 @@ class AuthorDaoTest {
      */
     @Test
     void getByPropertyEqual() {
-        authorDao = new AuthorDao();
-        List<Author> authors = authorDao.getByPropertyLike("lastName", "Sierra");
-        assertEquals(1, authors.size());
-        assertEquals(1, authors.get(0).getId());
+        userDao = new UserDao();
+        List<User> users = userDao.getByPropertyLike("lastName", "Gao");
+        assertEquals(1, users.size());
+        assertEquals(1, users.get(0).getId());
     }
 
     /**
@@ -100,8 +102,8 @@ class AuthorDaoTest {
      */
     @Test
     void getByPropertyLike() {
-        authorDao = new AuthorDao();
-        List<Author> authors = authorDao.getByPropertyLike("lastName", "O");
-        assertEquals(1, authors.size());
+        userDao = new UserDao();
+        List<User> users = userDao.getByPropertyLike("lastName", "G");
+        assertEquals(1, users.size());
     }
 }
