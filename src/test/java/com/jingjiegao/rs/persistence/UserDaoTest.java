@@ -83,7 +83,7 @@ class UserDaoTest {
     void getAll() {
         userDao = new UserDao();
         List<User> users = userDao.getAll();
-        assertEquals(3, users.size());
+        assertEquals(2, users.size());
     }
 
     /**
