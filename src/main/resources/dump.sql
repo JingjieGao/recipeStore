@@ -42,7 +42,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,2,'Chicken Curry','Curry','Chicken, Curry Powder, Coconut Milk, Onion, Garlic, Ginger, Salt, Pepper','1. Fry the chicken with onions and garlic. 2. Add curry powder and coconut milk. 3. Simmer and serve with rice.'),(2,1,'Vegetable Stir Fry','Vegetarian','Carrot, Bell Pepper, Broccoli, Soy Sauce, Garlic, Olive Oil','1. Cut the vegetables. 2. Stir fry with garlic and soy sauce. 3. Serve with rice.'),(3,3,'Beef Tacos','Mexican','Ground Beef, Taco Shells, Lettuce, Tomato, Cheese, Sour Cream, Salsa','1. Cook the beef. 2. Fill the taco shells with beef and toppings. 3. Serve with salsa and sour cream.');
+INSERT INTO `recipes` VALUES (1,2,'Chicken Curry','Curry','Chicken, Curry Powder, Coconut Milk, Onion, Garlic, Ginger, Salt, Pepper','1. Fry the chicken with onions and garlic. 2. Add curry powder and coconut milk. 3. Simmer and serve with rice.'),(2,1,'Vegetable Stir Fry','Vegetarian','Carrot, Bell Pepper, Broccoli, Soy Sauce, Garlic, Olive Oil','1. Cut the vegetables. 2. Stir fry with garlic and soy sauce. 3. Serve with rice.'),(3,1,'Beef Tacos','Mexican','Ground Beef, Taco Shells, Lettuce, Tomato, Cheese, Sour Cream, Salsa','1. Cook the beef. 2. Fill the taco shells with beef and toppings. 3. Serve with salsa and sour cream.');
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -70,7 +70,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Jane','Gao','jane@example.com','password123'),(2,'Sam','Smith','sam@example.com','password456'),(3,'Emma','Davis','emma@example.com','password789');
+INSERT INTO `user` VALUES (1,'Jane','Gao','jane@example.com','password123'),(2,'Sam','Smith','sam@example.com','password456');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
