@@ -20,7 +20,7 @@
 
 - [X] Design screens - make sure all MVP user stories are covered
 - [X] Triple-check for Checkpoint 1
-- [ ] First cut at database design
+- [X] First cut at database design
 - [ ] Create a development version of the database with at least the Recipe table
 - [ ] Create Recipes entity class
 - [ ] Implement functionality to add and update recipes
@@ -47,7 +47,7 @@
 - [ ] Implement a JSP page to display and manage favorite recipes
 - [ ] Develop a Servlet to handle the marking of favorite recipes 
 - [ ] Implement unit tests for the favorite recipes functionality
-- [ ] Update Time log
+- [X] Update Time log
 
 ### Week 7 - Application deployed to AWS & User Authentication
 #### Checkpoint 2 is Due: Database designed and created, at least one DAO with full CRUD (create, read, update, delete) implemented with Hibernate, DAO is fully unit tested, Log4J is implemented (no System.out.printlns)
