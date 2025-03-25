@@ -1,9 +1,9 @@
 package com.jingjiegao.rs.controller;
 
+import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
-import com.jingjiegao.rs.entity.User;
+import com.jingjiegao.rs.persistence.CategoryDao;
 import com.jingjiegao.rs.persistence.RecipeDao;
-import com.jingjiegao.rs.persistence.UserDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The type Add recipe servlet.
@@ -20,20 +21,28 @@ import java.io.IOException;
 )
 public class AddRecipeServlet extends HttpServlet {
     private RecipeDao recipeDao = new RecipeDao();
-    private UserDao userDao = new UserDao();
+    private CategoryDao categoryDao = new CategoryDao();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Category> categories = categoryDao.getAll();
+
+        request.setAttribute("categories", categories);
+
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("user_id"));
         String name = request.getParameter("name");
-        String category = request.getParameter("category");
+        int categoryId = Integer.parseInt(request.getParameter("category_id"));
         String ingredients = request.getParameter("ingredients");
         String instructions = request.getParameter("instructions");
 
-        User user = userDao.getById(userId);
+        Category category = categoryDao.getById(categoryId);
 
-        if (user != null) {
+        if (category != null) {
             // Create a new Recipe object
-            Recipe recipe = new Recipe(user, name, category, ingredients, instructions);
+            Recipe recipe = new Recipe(name, category, ingredients, instructions);
 
             // Insert the recipe into the database
             int recipeId = recipeDao.insert(recipe);
