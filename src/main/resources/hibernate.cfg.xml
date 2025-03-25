@@ -16,7 +16,7 @@
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
 
-        <mapping class="com.jingjiegao.rs.entity.User" />
+        <mapping class="com.jingjiegao.rs.entity.Category" />
         <mapping class="com.jingjiegao.rs.entity.Recipe" />
 
     </session-factory>
