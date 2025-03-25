@@ -89,7 +89,7 @@ public class RecipeDao {
         Root<Recipe> root = query.from(Recipe.class);
         List<Recipe> recipes = session.createSelectionQuery( query ).getResultList();
 
-        logger.debug("The list of books " + recipes);
+        logger.debug("The list of recipes " + recipes);
         session.close();
 
         return recipes;
