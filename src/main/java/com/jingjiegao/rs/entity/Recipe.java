@@ -14,15 +14,13 @@ public class Recipe {
     @GenericGenerator(name = "native",strategy = "native")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",
-            foreignKey = @ForeignKey(name = "recipes_user_id_fk")
-    )
-    private User user;
-
     private String name;
 
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id",
+            foreignKey = @ForeignKey(name = "recipes_category_id_fk")
+    )
+    private Category category;
 
     private String ingredients;
 
@@ -37,14 +35,12 @@ public class Recipe {
     /**
      * Instantiates a new Recipe.
      *
-     * @param user         the user
      * @param name         the name
      * @param category     the category
      * @param ingredients  the ingredients
      * @param instructions the instructions
      */
-    public Recipe(User user, String name, String category, String ingredients, String instructions) {
-        this.user = user;
+    public Recipe(String name, Category category, String ingredients, String instructions) {
         this.name = name;
         this.category = category;
         this.ingredients = ingredients;
@@ -70,24 +66,6 @@ public class Recipe {
     }
 
     /**
-     * Gets user.
-     *
-     * @return the user
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Sets user.
-     *
-     * @param user the user
-     */
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    /**
      * Gets name.
      *
      * @return the name
@@ -110,7 +88,7 @@ public class Recipe {
      *
      * @return the category
      */
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
@@ -119,7 +97,7 @@ public class Recipe {
      *
      * @param category the category
      */
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -163,9 +141,8 @@ public class Recipe {
     public String toString() {
         return "Recipe{" +
                 "id=" + id +
-                ", user=" + user +
                 ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
+                ", category=" + category +
                 ", ingredients='" + ingredients + '\'' +
                 ", instructions='" + instructions + '\'' +
                 '}';
