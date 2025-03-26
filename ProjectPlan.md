@@ -74,7 +74,7 @@
 #### Checkpoint 3 is Due: Deployed to AWS, at least one JSP that displays data from the database is implemented, authentication implemented, add AWS deployed app link to indie project list in student repo.
 - [ ] Double-check all checkpoint 3 items (above) are complete and visible in github.
 - [ ] Full system tested for bugs, functionality, and security
-- [ ] Update Time log
+- [X] Update Time log
 
 ### Week 15
 - [ ] Implement Feedback from Week 14 review
