@@ -12,17 +12,17 @@ As a user, I want to create an account so that I can save and access my recipes.
 
 As a registered user, I want to log in and log out of my account so that my recipes are securely stored.
 
+### View Recipes *
+
+As a user, I want to view information such as the dish name, category, ingredients, and instructions, so that I can explore different recipes.
+
 ### Find Recipes by Name*
 
-As a registered user, I want to search for a recipe by name so that I can quickly find what I need.
+As a user, I want to search for a recipe by name so that I can quickly find what I need.
 
 ### Category Recipes*
 
 As a registered user, I want to categorize my recipes so that I can easily organize them.
-
-### View Recipes *
-
-As a registered user, I want to view information such as the dish name, category, ingredients, and instructions, so that I can choose a recipe to cook.
 
 ### Add Recipes *
 
