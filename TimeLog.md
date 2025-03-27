@@ -60,12 +60,13 @@
 
 ## Week 9
 
-| Date       | Task                                                                 | Hours    | Notes                                         |
-|------------|----------------------------------------------------------------------|----------|-----------------------------------------------|
-| 03/25/2025 | Redesign database for individual project                             | 1 hour   | remove the User table, add the Category table |
-| 03/25/2025 | Create the Category entity                                           | 0.5 hour |                                               |
-| 03/25/2025 | Create the CategoryDao persistence                                   | 0.5 hour |                                               |
-| 03/25/2025 | Update the Recipe entity and the RecipeDao for matching new database | 0.5 hour |                                               |
-| 03/25/2025 | Write tests and debug for CategoryDao and RecipeDao                  | 3 hours  |                                               |
-| 03/25/2025 | Update the add recipe jsp page and servlet                           | 1 hour   |                                               |
-| 03/26/2025 | Update the user stories and other problems from Checkpoint1 feedback | 1 hour   |                                               |
+| Date       | Task                                                                 | Hours     | Notes                                         |
+|------------|----------------------------------------------------------------------|-----------|-----------------------------------------------|
+| 03/25/2025 | Redesign database for individual project                             | 1 hour    | remove the User table, add the Category table |
+| 03/25/2025 | Create the Category entity                                           | 0.5 hour  |                                               |
+| 03/25/2025 | Create the CategoryDao persistence                                   | 0.5 hour  |                                               |
+| 03/25/2025 | Update the Recipe entity and the RecipeDao for matching new database | 0.5 hour  |                                               |
+| 03/25/2025 | Write tests and debug for CategoryDao and RecipeDao                  | 3 hours   |                                               |
+| 03/25/2025 | Update the add recipe jsp page and servlet                           | 1 hour    |                                               |
+| 03/26/2025 | Update the user stories and other problems from Checkpoint1 feedback | 1 hour    |                                               |
+| 03/26/2025 | Redo Week8 exercise                                                  | 1.5 hours |                                               |
