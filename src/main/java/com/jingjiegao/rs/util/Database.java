@@ -14,18 +14,19 @@ import java.sql.Statement;
 /**
  * The type Database.
  */
-public class Database {
+public class Database implements PropertiesLoader {
     private static Database instance = new Database();
     private final Logger logger = LogManager.getLogger(this.getClass());
+
     private Properties properties;
-    private PropertiesLoader propertiesLoader;
     private Connection connection;
 
-    /** private constructor prevents instantiating this class anywhere else
-     **/
+    /**
+     * private constructor prevents instantiating this class anywhere else
+     */
     private Database() {
-        this.propertiesLoader = new DatabasePropertiesLoader();
-        this.properties = propertiesLoader.loadProperties();
+        // Load properties using the interface method
+        this.properties = loadProperties("/database.properties");
     }
 
     /**
@@ -87,7 +88,6 @@ public class Database {
      * @param sqlFile the sql file to be read and executed line by line
      */
     public void runSQL(String sqlFile) {
-
         Statement stmt = null;
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(classloader.getResourceAsStream(sqlFile))))  {
@@ -116,6 +116,5 @@ public class Database {
         } finally {
             disconnect();
         }
-
     }
 }

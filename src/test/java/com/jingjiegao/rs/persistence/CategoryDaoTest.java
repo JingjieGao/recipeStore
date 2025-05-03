@@ -9,8 +9,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Category dao test.
+ */
 class CategoryDaoTest {
 
+    /**
+     * The Category dao.
+     */
     CategoryDao categoryDao;
 
     /**
@@ -22,6 +28,9 @@ class CategoryDaoTest {
         database.runSQL("cleandb.sql");
     }
 
+    /**
+     * Gets by id.
+     */
     @Test
     void getById() {
         categoryDao = new CategoryDao();
@@ -30,6 +39,9 @@ class CategoryDaoTest {
         assertEquals("Appetizer", retrievedCategory.getName());
     }
 
+    /**
+     * Update.
+     */
     @Test
     void update() {
         categoryDao = new CategoryDao();
@@ -41,6 +53,9 @@ class CategoryDaoTest {
         assertEquals("NameForTest", actualCategory.getName());
     }
 
+    /**
+     * Insert.
+     */
     @Test
     void insert() {
         categoryDao = new CategoryDao();
@@ -51,6 +66,9 @@ class CategoryDaoTest {
         assertEquals("NameForTest", insertedCategory.getName());
     }
 
+    /**
+     * Delete.
+     */
     @Test
     void delete() {
         categoryDao = new CategoryDao();
@@ -58,6 +76,9 @@ class CategoryDaoTest {
         assertNull(categoryDao.getById(2));
     }
 
+    /**
+     * Gets all.
+     */
     @Test
     void getAll() {
         categoryDao = new CategoryDao();
@@ -65,6 +86,9 @@ class CategoryDaoTest {
         assertEquals(4, categories.size());
     }
 
+    /**
+     * Gets by property equal.
+     */
     @Test
     void getByPropertyEqual() {
         categoryDao = new CategoryDao();
@@ -73,6 +97,9 @@ class CategoryDaoTest {
         assertEquals(1, categories.get(0).getId());
     }
 
+    /**
+     * Gets by property like.
+     */
     @Test
     void getByPropertyLike() {
         categoryDao = new CategoryDao();

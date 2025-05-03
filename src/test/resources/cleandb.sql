@@ -66,7 +66,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Caesar Salad',1,'Lettuce, Caesar dressing, Croutons, Parmesan cheese','Toss lettuce with dressing, top with croutons and parmesan.'),(2,'Spaghetti Bolognese',2,'Spaghetti, Ground beef, Tomato sauce, Garlic, Onions, Olive oil','Cook spaghetti. Prepare Bolognese sauce with ground beef, garlic, onions, and tomato sauce. Serve together.'),(3,'Chocolate Cake',3,'Flour, Cocoa powder, Eggs, Butter, Sugar, Baking powder','Mix ingredients and bake at 350°F for 30 minutes.'),(4,'Mojito',4,'Mint, Lime, Rum, Sugar, Soda water','Muddle mint leaves and lime, mix with rum and sugar, top with soda water.');
+INSERT INTO `recipes` VALUES (1,'Caesar Salad',1,'Lettuce, Caesar dressing, Croutons, Parmesan cheese','Toss lettuce with dressing, top with croutons and parmesan.'),(2,'Spaghetti Bolognese',2,'Spaghetti, Ground beef, Tomato sauce, Garlic, Onions, Olive oil','Cook spaghetti. Prepare Bolognese sauce with ground beef, garlic, onions, and tomato sauce. Serve together.'),(3,'Chocolate Cake',3,'Flour, Cocoa powder, Eggs, Butter, Sugar, Baking powder','Mix ingredients and bake at 350 degrees F for 30 minutes.'),(4,'Mojito',4,'Mint, Lime, Rum, Sugar, Soda water','Muddle mint leaves and lime, mix with rum and sugar, top with soda water.');
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
