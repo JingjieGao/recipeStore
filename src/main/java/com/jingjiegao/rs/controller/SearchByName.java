@@ -15,9 +15,9 @@ import java.util.List;
  * The type Search recipe.
  */
 @WebServlet(
-        urlPatterns = {"/searchRecipeServlet"}
+        urlPatterns = {"/searchByNameServlet"}
 )
-public class SearchRecipe extends HttpServlet {
+public class SearchByName extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Get the parameter from the search input
@@ -38,8 +38,8 @@ public class SearchRecipe extends HttpServlet {
         // Set the resulting recipe list in the request scope
         request.setAttribute("recipes", recipes);
 
-        // Forward the request to the searchRecipe.jsp page for display
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/searchRecipe.jsp");
+        // Forward the request to the searchByName.jsp page for display
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/searchByName.jsp");
         dispatcher.forward(request, response);
     }
 }
