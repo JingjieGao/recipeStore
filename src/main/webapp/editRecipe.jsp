@@ -1,16 +1,61 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: shide
-  Date: 2025/5/1
-  Time: 21:21
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="head.jsp" %>
+<%@include file="taglib.jsp" %>
+<%@include file="nav.jsp" %>
+
 <html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
+<body>
+<!-- Main content -->
+<main class="container d-flex justify-content-center mt-5">
+    <div class="card shadow-sm p-4 w-75">
+        <div class="card-body">
+            <h2 class="card-title text-center text-black font-weight-bold mb-5 py-2">Edit Recipe</h2>
+
+            <form id="recipeForm" action="editRecipeServlet" method="POST">
+                <!-- Hidden recipe_id to identify which recipe to update -->
+                <input type="hidden" name="recipe_id" value="${recipe.id}"/>
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" id="name" name="name" value="${recipe.name}" class="form-control" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Category:</label>
+                    <select id="category_id" name="category_id" class="form-select" required>
+                        <option value="" disabled>Select a category</option>
+                        <!-- Iterate over the categories collection and create options for each category -->
+                        <c:forEach var="category" items="${categories}">
+                            <option value="${category.id}"
+                                    <c:if test="${category.id == recipe.category.id}">selected</c:if>>
+                                    ${category.name}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ingredients" class="form-label">Ingredients:</label>
+                    <textarea id="ingredients" name="ingredients" rows="4" class="form-control"
+                              required>${recipe.ingredients}</textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label for="instructions" class="form-label">Instructions:</label>
+                    <textarea id="instructions" name="instructions" rows="4" class="form-control"
+                              required>${recipe.instructions}</textarea>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary w-25">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    const userName = '<c:out value="${userName}" default="" />';
+</script>
+<script src="JS/checkUser.js"></script>
+</body>
 </html>

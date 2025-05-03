@@ -1,16 +1,22 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: shide
-  Date: 2025/4/30
-  Time: 22:56
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="head.jsp" %>
+<%@include file="taglib.jsp" %>
+<%@include file="nav.jsp" %>
+
 <html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
+<body>
+<main class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-danger text-center" role="alert">
+                <h1 class="mb-3">Oops! Something went wrong.</h1>
+                <p>
+                    <%= request.getAttribute("errorMessage") != null
+                            ? request.getAttribute("errorMessage")
+                            : "An unexpected error occurred." %>
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
 </html>
