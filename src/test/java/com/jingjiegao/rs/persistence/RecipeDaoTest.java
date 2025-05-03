@@ -10,6 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Recipe dao test.
+ */
 class RecipeDaoTest {
     /**
      * The Author dao.
@@ -26,6 +29,9 @@ class RecipeDaoTest {
         recipeDao = new RecipeDao();
     }
 
+    /**
+     * Gets by id.
+     */
     @Test
     void getById() {
         Recipe retrievedRecipe = recipeDao.getById(1);
@@ -34,6 +40,9 @@ class RecipeDaoTest {
         assertEquals(1, retrievedRecipe.getId());
     }
 
+    /**
+     * Update.
+     */
     @Test
     void update() {
         Recipe recipe = recipeDao.getById(2);
@@ -43,6 +52,9 @@ class RecipeDaoTest {
         assertEquals("For test", retrievedRecipe.getName());
     }
 
+    /**
+     * Insert.
+     */
     @Test
     void insert() {
         CategoryDao categoryDao = new CategoryDao();
@@ -63,16 +75,43 @@ class RecipeDaoTest {
         assertEquals("For test", retrievedRecipe.getName());
     }
 
+    /**
+     * Delete.
+     */
     @Test
     void delete() {
         recipeDao.delete(recipeDao.getById(3));
         assertNull(recipeDao.getById(3));
     }
 
+    /**
+     * Gets all.
+     */
     @Test
     void getAll() {
         List<Recipe> recipes = recipeDao.getAll();
         assertEquals(4, recipes.size());
     }
 
+    /**
+     * Gets by property like.
+     */
+    @Test
+    void getByPropertyLike() {
+        RecipeDao recipeDao = new RecipeDao();
+        List<Recipe> recipes = recipeDao.getByPropertyLike("name", "Cake");
+        assertEquals(1, recipes.size());
+    }
+
+    /**
+     * Gets by category id.
+     */
+    @Test
+    void getByCategoryId() {
+        RecipeDao recipeDao = new RecipeDao();
+        List<Recipe> appetizerRecipes = recipeDao.getByCategoryId(1);
+        assertNotNull(appetizerRecipes);
+        assertEquals(1, appetizerRecipes.size());
+        assertEquals("Caesar Salad", appetizerRecipes.get(0).getName());
+    }
 }
