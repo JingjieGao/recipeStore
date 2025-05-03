@@ -1,7 +1,10 @@
-package edu.matc.auth;
+package com.jingjiegao.rs.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The type Keys item.
+ */
 public class KeysItem{
 
 	@JsonProperty("kty")
@@ -22,26 +25,56 @@ public class KeysItem{
 	@JsonProperty("n")
 	private String N;
 
+	/**
+	 * Get kty string.
+	 *
+	 * @return the string
+	 */
 	public String getKty(){
 		return kty;
 	}
 
+	/**
+	 * Get e string.
+	 *
+	 * @return the string
+	 */
 	public String getE(){
 		return E;
 	}
 
+	/**
+	 * Get use string.
+	 *
+	 * @return the string
+	 */
 	public String getUse(){
 		return use;
 	}
 
+	/**
+	 * Get kid string.
+	 *
+	 * @return the string
+	 */
 	public String getKid(){
 		return kid;
 	}
 
+	/**
+	 * Get alg string.
+	 *
+	 * @return the string
+	 */
 	public String getAlg(){
 		return alg;
 	}
 
+	/**
+	 * Get n string.
+	 *
+	 * @return the string
+	 */
 	public String getN(){
 		return N;
 	}
