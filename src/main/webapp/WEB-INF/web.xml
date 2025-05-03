@@ -3,8 +3,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
   <display-name>Recipe Store Web Application</display-name>
-
-  <welcome-file-list>
+  <!-- <welcome-file-list>
     <welcome-file>addRecipeServlet</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list> -->
 </web-app>
