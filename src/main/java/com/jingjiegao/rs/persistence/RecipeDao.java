@@ -1,7 +1,9 @@
 package com.jingjiegao.rs.persistence;
 
+import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,10 +90,46 @@ public class RecipeDao {
         CriteriaQuery<Recipe> query = builder.createQuery(Recipe.class);
         Root<Recipe> root = query.from(Recipe.class);
         List<Recipe> recipes = session.createSelectionQuery( query ).getResultList();
-
         logger.debug("The list of recipes " + recipes);
         session.close();
+        return recipes;
+    }
 
+    /**
+     * Gets by property like.
+     *
+     * @param propertyName the property name
+     * @param value        the value
+     * @return the by property like
+     */
+    public List<Recipe> getByPropertyLike(String propertyName, String value) {
+        Session session = sessionFactory.openSession();
+        logger.debug("Searching for recipe with {} = {}",  propertyName, value);
+        HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Recipe> query = builder.createQuery(Recipe.class);
+        Root<Recipe> root = query.from(Recipe.class);
+        Expression<String> propertyPath = root.get(propertyName);
+        query.where(builder.like(propertyPath, "%" + value + "%"));
+        List<Recipe> recipes = session.createSelectionQuery(query).getResultList();
+        session.close();
+        return recipes;
+    }
+
+    /**
+     * Gets by category id.
+     *
+     * @param categoryId the category id
+     * @return the by category id
+     */
+    public List<Recipe> getByCategoryId(int categoryId) {
+        Session session = sessionFactory.openSession();
+        logger.debug("Searching for recipe with categoryId = {}", categoryId);
+        HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Recipe> query = builder.createQuery(Recipe.class);
+        Root<Recipe> root = query.from(Recipe.class);
+        query.select(root).where(builder.equal(root.get("category").get("id"), categoryId));
+        List<Recipe> recipes = session.createSelectionQuery(query).getResultList();
+        session.close();
         return recipes;
     }
 }
