@@ -52,7 +52,7 @@ fabric.properties
 ### Secret ##
 /src/main/resources/
 /src/test/resources/
-.env
+src/main/resources/.env
 
 ### DB ##
 !/src/main/resources/dump.sql
