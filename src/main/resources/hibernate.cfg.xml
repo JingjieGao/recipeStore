@@ -21,6 +21,8 @@
 
         <mapping class="com.jingjiegao.rs.entity.Category" />
         <mapping class="com.jingjiegao.rs.entity.Recipe" />
+        <mapping class="com.jingjiegao.rs.recipeApi.Response" />
+        <mapping class="com.jingjiegao.rs.recipeApi.MealsItem" />
 
     </session-factory>
 
