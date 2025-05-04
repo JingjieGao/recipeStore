@@ -1,16 +1,22 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: shide
-  Date: 2025/5/3
-  Time: 23:17
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="head.jsp" %>
+<%@include file="taglib.jsp" %>
+<%@include file="nav.jsp" %>
+
 <html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
+<body>
+<!-- New Recipe Search Form -->
+<main class="container">
+    <div class="card p-4 shadow-sm">
+        <h4 class="mb-3">Explore New Recipes</h4>
+        <form action="api/recipe/search" method="get" class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="searchRecipe" class="form-control" placeholder="Enter keywords">
+            </div>
+            <div class="col-md-6 d-flex">
+                <button type="submit" class="btn btn-primary me-2">Search</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
 </html>
