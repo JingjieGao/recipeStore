@@ -5,7 +5,6 @@
         <nav>
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="addRecipeServlet">Add Recipe</a></li>
 
                 <!-- Category Dropdown -->
                 <li class="nav-item dropdown">
@@ -19,6 +18,11 @@
                         <li><a class="dropdown-item" href="searchByCategoryServlet?categoryId=4">Beverage</a></li>
                     </ul>
                 </li>
+
+                <li class="nav-item"><a class="nav-link" href="addRecipeServlet">Add Recipe</a></li>
+
+                <!-- New Recipe Search Page Link -->
+                <li class="nav-item"><a class="nav-link" href="newRecipeSearch.jsp">Explore</a></li>
 
                 <c:if test="${empty sessionScope.userName}">
                     <li class="nav-item"><a class="nav-link" href="logIn">Login</a></li>
