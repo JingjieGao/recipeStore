@@ -2,6 +2,8 @@ package com.jingjiegao.rs.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The type Recipe.
@@ -10,11 +12,15 @@ import jakarta.persistence.*;
 @Table(name = "recipes")
 public class Recipe {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
-    @GenericGenerator(name = "native",strategy = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private int id;
 
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id",
+            foreignKey = @ForeignKey(name = "recipes_user_id_fk")
+    )
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "category_id",
@@ -22,9 +28,17 @@ public class Recipe {
     )
     private Category category;
 
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+
+    @Column(name = "ingredients")
     private String ingredients;
 
+    @Column(name = "instructions")
     private String instructions;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favorites = new ArrayList<>();
 
     /**
      * Instantiates a new Recipe.
@@ -35,14 +49,16 @@ public class Recipe {
     /**
      * Instantiates a new Recipe.
      *
-     * @param name         the name
+     * @param user         the user
      * @param category     the category
+     * @param name         the name
      * @param ingredients  the ingredients
      * @param instructions the instructions
      */
-    public Recipe(String name, Category category, String ingredients, String instructions) {
-        this.name = name;
+    public Recipe(User user, Category category, String name, String ingredients, String instructions) {
+        this.user = user;
         this.category = category;
+        this.name = name;
         this.ingredients = ingredients;
         this.instructions = instructions;
     }
@@ -66,21 +82,21 @@ public class Recipe {
     }
 
     /**
-     * Gets name.
+     * Gets user.
      *
-     * @return the name
+     * @return the user
      */
-    public String getName() {
-        return name;
+    public User getUser() {
+        return user;
     }
 
     /**
-     * Sets name.
+     * Sets user.
      *
-     * @param name the name
+     * @param user the user
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -99,6 +115,24 @@ public class Recipe {
      */
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -137,12 +171,51 @@ public class Recipe {
         this.instructions = instructions;
     }
 
+    /**
+     * Gets favorites.
+     *
+     * @return the favorites
+     */
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    /**
+     * Sets favorites.
+     *
+     * @param favorites the favorites
+     */
+    public void setFavorites(List<Favorite> favorites) {
+        this.favorites = favorites;
+    }
+
+    /**
+     * Add favorite.
+     *
+     * @param favorite the favorite
+     */
+    public void addFavorite(Favorite favorite) {
+        favorites.add(favorite);
+        favorite.setRecipe(this);
+    }
+
+    /**
+     * Remove favorite.
+     *
+     * @param favorite the favorite
+     */
+    public void removeFavorite(Favorite favorite) {
+        favorites.remove(favorite);
+        favorite.setRecipe(null);
+    }
+
     @Override
     public String toString() {
         return "Recipe{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", user=" + user +
                 ", category=" + category +
+                ", name='" + name + '\'' +
                 ", ingredients='" + ingredients + '\'' +
                 ", instructions='" + instructions + '\'' +
                 '}';
