@@ -1,4 +1,4 @@
 package com.jingjiegao.rs.controller;
 
-public class AddRecipe {
+public class AddFavorite {
 }

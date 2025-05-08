@@ -2,9 +2,6 @@ package com.jingjiegao.rs.controller;
 
 import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.entity.Category;
-import com.jingjiegao.rs.persistence.RecipeDao;
-import com.jingjiegao.rs.persistence.CategoryDao;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
