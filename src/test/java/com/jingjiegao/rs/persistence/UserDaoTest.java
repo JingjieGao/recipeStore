@@ -1,15 +1,17 @@
 package com.jingjiegao.rs.persistence;
 
-import com.jingjiegao.rs.entity.Category;
+import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.util.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RecipeDaoTest {
-
-    private RecipeDao recipeDao;
+/**
+ * The type User dao test.
+ */
+class UserDaoTest {
+    private GenericDao<User> userDao;
 
     /**
      * Sets up.
@@ -18,7 +20,7 @@ class RecipeDaoTest {
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
-        recipeDao = new RecipeDao();
+        userDao = new GenericDao<>(User.class);
     }
 
     /**
@@ -26,22 +28,25 @@ class RecipeDaoTest {
      */
     @Test
     void getById() {
-        Category retrievedCategory = categoryDao.getById(1);
-        assertNotNull(retrievedCategory);
-        assertEquals("Appetizer", retrievedCategory.getName());
+        // id:1 username:Alice
+        User retrievedUser = userDao.getById(1);
+        assertNotNull(retrievedUser);
+        assertEquals("Alice", retrievedUser.getUsername());
+        assertEquals("Alice@example.com", retrievedUser.getEmail());
     }
+
 
     /**
      * Update.
      */
     @Test
     void update() {
-        Category category = categoryDao.getById(1);
-        String originalName = category.getName();
-        category.setName("UpdatedName");
-        categoryDao.Update(category);
-        Category updated = categoryDao.getById(1);
-        assertEquals("UpdatedName", updated.getName());
+        // id:2 username:Bob
+        User user = userDao.getById(2);
+        user.setFirstName("Robert");
+        userDao.Update(user);
+        User updatedUser = userDao.getById(2);
+        assertEquals("Robert", updatedUser.getFirstName());
     }
 
 
@@ -50,44 +55,50 @@ class RecipeDaoTest {
      */
     @Test
     void insert() {
-        Category newCategory = new Category("TestCategory");
-        int id = categoryDao.insert(newCategory);
+        User newUser = new User("sub-charlie-003", "Charlie", "Charlie@example.com", "", "");
+        int id = userDao.insert(newUser);
         assertNotEquals(0, id);
-        Category inserted = categoryDao.getById(id);
-        assertEquals("TestCategory", inserted.getName());
+        User insertedUser = userDao.getById(id);
+        assertEquals("Charlie", insertedUser.getUsername());
+        assertEquals("Charlie@example.com", insertedUser.getEmail());
     }
+
 
     /**
      * Delete.
      */
     @Test
     void delete() {
-        Category newCategory = new Category("ToBeDeleted");
-        int id = categoryDao.insert(newCategory);
-        Category toDelete = categoryDao.getById(id);
-        assertNotNull(toDelete);
-        categoryDao.delete(toDelete);
-        assertNull(categoryDao.getById(id));
+        User newUser = new User("sub-delete-004", "DeleteMe", "deleteme@example.com", "", "");
+        int id = userDao.insert(newUser);
+        User inserted = userDao.getById(id);
+        assertNotNull(inserted);
+        userDao.delete(inserted);
+        assertNull(userDao.getById(id));
     }
+
 
     /**
      * Gets all.
      */
     @Test
     void getAll() {
-        List<Category> categories = categoryDao.getAll();
-        assertNotNull(categories);
-        assertEquals(5, categories.size());
+        List<User> users = userDao.getAll();
+        assertNotNull(users);
+        // Alice and Bob
+        assertEquals(2, users.size());
     }
+
 
     /**
      * Gets by property equal.
      */
     @Test
     void getByPropertyEqual() {
-        List<Category> categories = categoryDao.getByPropertyEqual("name", "Appetizer");
-        assertEquals(1, categories.size());
-        assertEquals(1, categories.get(0).getId());
+        List<User> users = userDao.getByPropertyEqual("username", "Alice");
+        assertEquals(1, users.size());
+        assertEquals("Alice@example.com", users.get(0).getEmail());
+        assertEquals("sub-alice-001", users.get(0).getCognitoSub());
     }
 
     /**
@@ -95,12 +106,11 @@ class RecipeDaoTest {
      */
     @Test
     void getByPropertyLike() {
-        List<Category> categories = categoryDao.getByPropertyLike("name", "B");
-        assertEquals(1, categories.size());
+        List<User> users = userDao.getByPropertyLike("username", "B");
+        assertEquals(1, users.size());
+        assertEquals("Bob@example.com", users.get(0).getEmail());
+        assertEquals("sub-bob-002", users.get(0).getCognitoSub());
     }
 
 
-    @Test
-    void getByCategoryId() {
-    }
 }
