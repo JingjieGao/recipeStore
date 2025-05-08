@@ -1,6 +1,7 @@
 package com.jingjiegao.rs.controller;
 
 import com.jingjiegao.rs.entity.Recipe;
+import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.persistence.RecipeDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,16 +18,17 @@ import java.io.IOException;
         urlPatterns = {"/deleteRecipeServlet"}
 )
 public class DeleteRecipe extends HttpServlet {
+    private final RecipeDao recipeDao = new RecipeDao();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Check if the user is logged in by retrieving the session
+        // Check if the user is logged in
         HttpSession session = request.getSession(false);
-        // Retrieve the userName from the session, or null if session doesn't exist
-        String userName = (session != null) ? (String) session.getAttribute("userName") : null;
+        User user = (User) session.getAttribute("user");
 
-        // If user is not logged in, redirect to login page with a message
-        if (userName == null || userName.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/logIn?message=Please+login+to+delete+recipes");
+        if (user == null) {
+            // If the user is not logged in, redirect to login page
+            response.sendRedirect("logIn");
             return;
         }
 
@@ -34,9 +36,7 @@ public class DeleteRecipe extends HttpServlet {
             // Retrieve the recipe ID from the request parameter
             int recipeId = Integer.parseInt(request.getParameter("recipe_id"));
 
-            // Create an instance of RecipeDao to interact with the database
-            RecipeDao recipeDao = new RecipeDao();
-            // Get the Recipe object by its ID
+            // Retrieve the recipe object by ID
             Recipe recipe = recipeDao.getById(recipeId);
 
             // If the recipe is found, delete it
