@@ -8,6 +8,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jingjiegao.rs.auth.*;
+import com.jingjiegao.rs.entity.User;
+import com.jingjiegao.rs.persistence.GenericDao;
 import com.jingjiegao.rs.util.PropertiesLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +39,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -96,37 +99,29 @@ public class Auth extends HttpServlet implements PropertiesLoader {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String authCode = req.getParameter("code");
-        String userName = null;
 
-        // Check if an authCode is passed in the URL query parameters
+        // Check for missing the authorization code
         if (authCode == null) {
             logger.error("Auth code is missing.");
             req.setAttribute("errorMessage", "Login failed: No auth code received.");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("error.jsp");
-            dispatcher.forward(req, resp);
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
             return;
         }
 
-        // Exchange an authCode for Token
-        HttpRequest authRequest = buildAuthRequest(authCode);
         try {
-            TokenResponse tokenResponse = getToken(authRequest);
-            userName = validate(tokenResponse);
-            // Set session after successful login
-            HttpSession session = req.getSession();
-            session.setAttribute("userName", userName);
-
+            // Get the Token from the authorization code
+            TokenResponse tokenResponse = getToken(buildAuthRequest(authCode));
+            // After validation, the user information is extracted
+            User user = validate(tokenResponse, req);
         } catch (IOException | InterruptedException e) {
-            logger.error("Error getting or validating the token: " + e.getMessage(), e);
+            logger.error("Token validation failed: " + e.getMessage(), e);
             req.setAttribute("errorMessage", "Login failed due to token validation error.");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("error.jsp");
-            dispatcher.forward(req, resp);
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
             return;
         }
 
-        // After the users successfully login and their identity is verified, the servlet forwards the request to Home page(index.jsp)
-        RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
-        dispatcher.forward(req, resp);
+        // The request is forwarded to the home page if the token was successfully validated
+        req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 
     private TokenResponse getToken(HttpRequest authRequest) throws IOException, InterruptedException {
@@ -143,16 +138,20 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         return tokenResponse;
     }
 
-    private String validate(TokenResponse tokenResponse) throws IOException {
+    private User validate(TokenResponse tokenResponse, HttpServletRequest req) throws IOException {
+        // Extract and parse the header of the JWT received in the tokenResponse
         ObjectMapper mapper = new ObjectMapper();
         CognitoTokenHeader tokenHeader = mapper.readValue(CognitoJWTParser.getHeader(tokenResponse.getIdToken()).toString(), CognitoTokenHeader.class);
 
+        // Get the key id and the algorithm used for signing the JWT
         String keyId = tokenHeader.getKid();
         String alg = tokenHeader.getAlg();
 
+        // Fetch and Decode the Public Key
         BigInteger modulus = new BigInteger(1, org.apache.commons.codec.binary.Base64.decodeBase64(jwks.getKeys().get(0).getN()));
         BigInteger exponent = new BigInteger(1, org.apache.commons.codec.binary.Base64.decodeBase64(jwks.getKeys().get(0).getE()));
 
+        // Create the Public Key
         PublicKey publicKey = null;
         try {
             publicKey = KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(modulus, exponent));
@@ -160,21 +159,46 @@ public class Auth extends HttpServlet implements PropertiesLoader {
             logger.error("Key generation error: " + e.getMessage(), e);
         }
 
+        // Set up JWT Verification Algorithm
         Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) publicKey, null);
 
+        // Build JWT Verifier
         String iss = String.format("https://cognito-idp.%s.amazonaws.com/%s", REGION, POOL_ID);
-
         JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer(iss)
                 .withClaim("token_use", "id")
                 .build();
 
+        // Verify the JWT
         DecodedJWT jwt = verifier.verify(tokenResponse.getIdToken());
-        String userName = jwt.getClaim("cognito:username").asString();
-        logger.debug("Username from token: " + userName);
-        logger.debug("All claims: " + jwt.getClaims());
 
-        return userName;
+        // Extract user-related claims from the decoded JWT
+        String cognitoSub = jwt.getClaim("sub").asString();
+        String username = jwt.getClaim("cognito:username").asString();
+        String email = jwt.getClaim("email").asString();
+        String firstName = jwt.getClaim("given_name").asString();
+        String lastName = jwt.getClaim("family_name").asString();
+
+        // Check if the User exists in the Database
+        GenericDao<User> userDao = new GenericDao<>(User.class);
+        List<User> users = userDao.getByPropertyEqual("cognitoSub", cognitoSub);
+        User user;
+
+        // Insert a new user, or retrieve the existing one.
+        if (users.isEmpty()) {
+            user = new User(cognitoSub, username, email, firstName, lastName);
+            int userId = userDao.insert(user);
+            logger.info("New user inserted with ID: " + userId);
+        } else {
+            user = users.get(0);
+        }
+
+        // Store the user object in the HTTP session.
+        HttpSession session = req.getSession();
+        session.setAttribute("user", user);
+
+        // Return the User Object
+        return user;
     }
 
     private HttpRequest buildAuthRequest(String authCode) {
