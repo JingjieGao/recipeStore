@@ -5,7 +5,7 @@ Cooking is a relaxing hobby for many people, including me. When I eat a deliciou
 
 Screenshots from the 101 Cookbooks:
 
-![101 Cookbooks](Images/101cookbooks.png)
+![101 Cookbooks](images/101cookbooks.png)
 
 ### Project Technologies/Techniques
 * Security/Authentication
@@ -30,6 +30,9 @@ Screenshots from the 101 Cookbooks:
 * Unit Testing
   - JUnit tests to cover all testable logic
 * IDE: IntelliJ IDEA
+* API
+  - TheMealDB
+  - https://www.themealdb.com/api.php
 
 ### Design
 * [User Stories](DesignDocuments/UserStories.md)
