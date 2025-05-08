@@ -53,8 +53,9 @@
     </div>
 </main>
 
+<!-- Check if user is logged in -->
 <script>
-    const userName = '<c:out value="${userName}" default="" />';
+    const isLoggedIn = ${user != null};
 </script>
 <script src="JS/checkUser.js"></script>
 </body>

@@ -11,7 +11,7 @@
         <h4 class="mb-3">Search Recipes</h4>
         <form action="searchByNameServlet" method="GET" class="row g-3">
             <div class="col-md-6">
-                <input type="text" name="name" class="form-control" placeholder="Search by name">
+                <input type="text" name="name" class="form-control" placeholder="Search by name" required>
             </div>
             <div class="col-md-6 d-flex">
                 <button type="submit" class="btn btn-primary me-2">Search</button>

@@ -10,7 +10,7 @@
         <h4 class="mb-3">Explore New Recipes</h4>
         <form action="api/recipe/search" method="get" class="row g-3">
             <div class="col-md-6">
-                <input type="text" name="searchRecipe" class="form-control" placeholder="Enter keywords">
+                <input type="text" name="searchRecipe" class="form-control" placeholder="Enter keywords" required>
             </div>
             <div class="col-md-6 d-flex">
                 <button type="submit" class="btn btn-primary me-2">Search</button>
