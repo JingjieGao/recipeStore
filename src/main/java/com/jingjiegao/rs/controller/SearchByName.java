@@ -3,7 +3,7 @@ package com.jingjiegao.rs.controller;
 import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.persistence.FavoriteDao;
-import com.jingjiegao.rs.persistence.RecipeDao;
+import com.jingjiegao.rs.persistence.GenericDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -19,7 +19,7 @@ import java.util.Map;
         urlPatterns = {"/searchByNameServlet"}
 )
 public class SearchByName extends HttpServlet {
-    private final RecipeDao recipeDao = new RecipeDao();
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
     private final FavoriteDao favoriteDao = new FavoriteDao();
 
     @Override

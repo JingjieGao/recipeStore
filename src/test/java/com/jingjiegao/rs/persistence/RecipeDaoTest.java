@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RecipeDaoTest {
     private GenericDao<Category> categoryDao;
     private GenericDao<User> userDao;
-    private RecipeDao recipeDao;
+    private GenericDao<Recipe> recipeDao;
 
     /**
      * Sets up.
@@ -25,9 +25,9 @@ class RecipeDaoTest {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
 
-        recipeDao = new RecipeDao();
         categoryDao = new GenericDao<>(Category.class);
         userDao = new GenericDao<>(User.class);
+        recipeDao = new GenericDao<>(Recipe.class);
     }
 
     /**
@@ -128,21 +128,6 @@ class RecipeDaoTest {
     void getByPropertyLike() {
         List<Recipe> recipes = recipeDao.getByPropertyLike("name", "C");
         assertEquals(2, recipes.size());
-    }
-
-    /**
-     * Gets by category id.
-     */
-    @Test
-    void getByCategoryId() {
-        // Category id: 1, name: Appetizer
-        List<Recipe> recipes = recipeDao.getByCategoryId(1);
-        assertNotNull(recipes, "The recipe list should not be null");
-        // Ensure at least one recipe is returned
-        assertTrue(recipes.size() > 0, "At least one recipe should be returned for category ID 1");
-        // Verify that the category is correct
-        assertEquals(1, recipes.get(0).getCategory().getId(), "The category ID of the recipe should be 1");
-
     }
 
     /**

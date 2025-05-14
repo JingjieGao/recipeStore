@@ -1,9 +1,10 @@
 package com.jingjiegao.rs.controller;
 
+import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.persistence.FavoriteDao;
-import com.jingjiegao.rs.persistence.RecipeDao;
+import com.jingjiegao.rs.persistence.GenericDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -19,8 +20,9 @@ import java.util.Map;
         urlPatterns = {"/searchByCategoryServlet"}
 )
 public class SearchByCategory extends HttpServlet {
-    private final RecipeDao recipeDao = new RecipeDao();
     private final FavoriteDao favoriteDao = new FavoriteDao();
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
+    private final GenericDao<Category> categoryDao = new GenericDao<>(Category.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,8 +40,11 @@ public class SearchByCategory extends HttpServlet {
             // Convert the category ID from String to int
             int categoryId = Integer.parseInt(categoryIdParam);
 
-            // Get all recipes that match the provided category ID
-            List<Recipe> recipes = recipeDao.getByCategoryId(categoryId);
+            // Retrieve the Category object using categoryId
+            Category category = categoryDao.getById(categoryId);
+
+            // Use the Category object to query corresponding Recipes
+            List<Recipe> recipes = recipeDao.getByPropertyEqual("category", category);
 
             // Create a map to store each recipe's favorite status
             Map<Integer, Boolean> favoriteStatusMap = new HashMap<>();

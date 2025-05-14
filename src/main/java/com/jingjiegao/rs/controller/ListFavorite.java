@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type List favorite.
+ */
 @WebServlet(
         urlPatterns = {"/listFavoriteServlet"}
 )
@@ -33,6 +36,11 @@ public class ListFavorite extends HttpServlet {
             return;
         }
 
+        // I tried to use the code below instead:
+        // List<Favorite> favoriteRecipes = user.getFavorites();
+        // but I encountered a LazyInitializationException.
+        // Use favoriteDao.getFavoritesByUserId(user.getId()) to avoid the LazyInitializationException
+        // and ensure that it fetches the most up-to-date data from the database.
         List<Favorite> favoriteRecipes = favoriteDao.getFavoritesByUserId(user.getId());
 
         // Create a map to store each recipe's favorite status

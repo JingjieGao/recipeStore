@@ -4,7 +4,6 @@ import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.persistence.GenericDao;
-import com.jingjiegao.rs.persistence.RecipeDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +20,7 @@ import java.util.List;
         urlPatterns = {"/addRecipeServlet"}
 )
 public class AddRecipe extends HttpServlet {
-    private final RecipeDao recipeDao = new RecipeDao();
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
     private final GenericDao<Category> categoryDao = new GenericDao<>(Category.class);
 
     @Override

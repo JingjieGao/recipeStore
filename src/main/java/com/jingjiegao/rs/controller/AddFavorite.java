@@ -4,7 +4,7 @@ import com.jingjiegao.rs.entity.Favorite;
 import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.persistence.FavoriteDao;
-import com.jingjiegao.rs.persistence.RecipeDao;
+import com.jingjiegao.rs.persistence.GenericDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +20,8 @@ import java.io.IOException;
         urlPatterns = {"/addFavoriteServlet"}
 )
 public class AddFavorite extends HttpServlet {
-    private final RecipeDao recipeDao = new RecipeDao();
     private final FavoriteDao favoriteDao = new FavoriteDao();
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

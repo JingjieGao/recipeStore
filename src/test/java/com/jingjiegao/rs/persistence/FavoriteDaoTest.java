@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class FavoriteDaoTest {
     private GenericDao<User> userDao;
-    private RecipeDao recipeDao;
+    private GenericDao<Recipe> recipeDao;
     private FavoriteDao favoriteDao;
 
     /**
@@ -27,7 +27,7 @@ class FavoriteDaoTest {
 
         favoriteDao = new FavoriteDao();
         userDao = new GenericDao<>(User.class);
-        recipeDao = new RecipeDao();
+        recipeDao = new GenericDao<>(Recipe.class);
     }
 
     /**
