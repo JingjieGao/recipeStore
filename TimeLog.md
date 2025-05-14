@@ -118,3 +118,9 @@
 | 05/06/2025 | Created GenericDao, FavoriteDao, and RecipeDao            | 1.5   |                            |
 | 05/06/2025 | Created the tests for all Daos                            | 5     |                            |
 | 05/07/2025 | Updated most parts of the servlets for new functionality  | 4     |                            |
+
+### Week 16
+| Date       | Task                                                                                        | Hours | Notes |
+|------------|---------------------------------------------------------------------------------------------|-------|-------|
+| 05/14/2025 | Added more CSS files and Updated JSP pages for styling purposes                             | 3     |       |
+| 05/14/2025 | Removed the recipeDao for Checkpoint 2 feedback and made necessary changes to related files | 2     |       |
