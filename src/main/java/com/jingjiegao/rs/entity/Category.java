@@ -2,7 +2,6 @@ package com.jingjiegao.rs.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class Category {
     @GenericGenerator(name = "native", strategy = "native")
     private int id;
 
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -26,26 +26,6 @@ public class Category {
      * Instantiates a new Category.
      */
     public Category() {
-    }
-
-    /**
-     * Add recipe.
-     *
-     * @param recipe the recipe
-     */
-    public void addRecipe(Recipe recipe) {
-        recipes.add(recipe);
-        recipe.setCategory(this);
-    }
-
-    /**
-     * Remove recipe.
-     *
-     * @param recipe the recipe
-     */
-    public void removeRecipe(Recipe recipe) {
-        recipes.remove(recipe);
-        recipe.setCategory(null);
     }
 
     /**
@@ -109,6 +89,26 @@ public class Category {
      */
     public void setRecipes(List<Recipe> recipes) {
         this.recipes = recipes;
+    }
+
+    /**
+     * Add recipe.
+     *
+     * @param recipe the recipe
+     */
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
+        recipe.setCategory(this);
+    }
+
+    /**
+     * Remove recipe.
+     *
+     * @param recipe the recipe
+     */
+    public void removeRecipe(Recipe recipe) {
+        recipes.remove(recipe);
+        recipe.setCategory(null);
     }
 
     @Override

@@ -2,22 +2,20 @@ package com.jingjiegao.rs.persistence;
 
 import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
+import com.jingjiegao.rs.entity.User;
 import com.jingjiegao.rs.util.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The type Recipe dao test.
  */
 class RecipeDaoTest {
-    /**
-     * The Author dao.
-     */
-    RecipeDao recipeDao;
+    private GenericDao<Category> categoryDao;
+    private GenericDao<User> userDao;
+    private GenericDao<Recipe> recipeDao;
 
     /**
      * Sets up.
@@ -26,7 +24,10 @@ class RecipeDaoTest {
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
-        recipeDao = new RecipeDao();
+
+        categoryDao = new GenericDao<>(Category.class);
+        userDao = new GenericDao<>(User.class);
+        recipeDao = new GenericDao<>(Recipe.class);
     }
 
     /**
@@ -34,10 +35,12 @@ class RecipeDaoTest {
      */
     @Test
     void getById() {
+        // id:1 user_id:1 category_id:1 name:Caesar Salad
         Recipe retrievedRecipe = recipeDao.getById(1);
         assertNotNull(retrievedRecipe);
+        assertEquals(1, retrievedRecipe.getUser().getId());
+        assertEquals(1, retrievedRecipe.getCategory().getId());
         assertEquals("Caesar Salad", retrievedRecipe.getName());
-        assertEquals(1, retrievedRecipe.getId());
     }
 
     /**
@@ -45,11 +48,13 @@ class RecipeDaoTest {
      */
     @Test
     void update() {
+        // id:2 name:Spaghetti Bolognese
         Recipe recipe = recipeDao.getById(2);
-        recipe.setName("For test");
-        recipeDao.update(recipe);
-        Recipe retrievedRecipe = recipeDao.getById(2);
-        assertEquals("For test", retrievedRecipe.getName());
+        String originalName = recipe.getName();
+        recipe.setName("UpdatedName");
+        recipeDao.Update(recipe);
+        Recipe updated = recipeDao.getById(2);
+        assertEquals("UpdatedName", updated.getName());
     }
 
     /**
@@ -57,22 +62,18 @@ class RecipeDaoTest {
      */
     @Test
     void insert() {
-        CategoryDao categoryDao = new CategoryDao();
-        Category category = categoryDao.getById(1);
-        assertNotNull(category, "category is null");
-        Recipe recipe = new Recipe();
-        recipe.setName("For test");
-        recipe.setCategory(category);
-        recipe.setIngredients("For test");
-        recipe.setInstructions("For test");
+        // Use an existing User and Category
+        User existingUser = userDao.getById(1); // Alice
+        Category existingCategory = categoryDao.getById(1);  // Appetizer
 
-        int insertedRecipeId = recipeDao.insert(recipe);
+        // Create a new Recipe with existing User and Category
+        Recipe newRecipe = new Recipe(existingUser, existingCategory, "TestRecipe", "Ingredients", "Instructions");
+        int id = recipeDao.insert(newRecipe);
 
-        Recipe retrievedRecipe = recipeDao.getById(insertedRecipeId);
-
-        assertNotNull(retrievedRecipe);
-        assertEquals(recipe.getIngredients(), retrievedRecipe.getIngredients());
-        assertEquals("For test", retrievedRecipe.getName());
+        // Verify that the new Recipe was inserted
+        assertNotEquals(0, id);
+        Recipe inserted = recipeDao.getById(id);
+        assertEquals("TestRecipe", inserted.getName());
     }
 
     /**
@@ -80,8 +81,23 @@ class RecipeDaoTest {
      */
     @Test
     void delete() {
-        recipeDao.delete(recipeDao.getById(3));
-        assertNull(recipeDao.getById(3));
+        // Use an existing User and Category
+        User existingUser = userDao.getById(1); // Alice
+        Category existingCategory = categoryDao.getById(1);  // Appetizer
+
+        // Create a new Recipe with existing User and Category
+        Recipe newRecipe = new Recipe(existingUser, existingCategory, "ToBeDeletedRecipe", "Ingredients", "Instructions");
+        int id = recipeDao.insert(newRecipe);
+
+        // Verify that the Recipe was inserted
+        Recipe toDelete = recipeDao.getById(id);
+        assertNotNull(toDelete);
+
+        // Delete the Recipe
+        recipeDao.delete(toDelete);
+
+        // Verify that the Recipe was deleted
+        assertNull(recipeDao.getById(id));
     }
 
     /**
@@ -90,7 +106,19 @@ class RecipeDaoTest {
     @Test
     void getAll() {
         List<Recipe> recipes = recipeDao.getAll();
-        assertEquals(4, recipes.size());
+        assertNotNull(recipes);
+        // Caesar Salad, Spaghetti Bolognese, Chocolate Cake, Mojito, and Mystery Dish
+        assertEquals(5, recipes.size());
+    }
+
+    /**
+     * Gets by property equal.
+     */
+    @Test
+    void getByPropertyEqual() {
+        List<Recipe> recipes = recipeDao.getByPropertyEqual("name", "Caesar Salad");
+        assertEquals(1, recipes.size());
+        assertEquals(1, recipes.get(0).getId());
     }
 
     /**
@@ -98,20 +126,33 @@ class RecipeDaoTest {
      */
     @Test
     void getByPropertyLike() {
-        RecipeDao recipeDao = new RecipeDao();
-        List<Recipe> recipes = recipeDao.getByPropertyLike("name", "Cake");
-        assertEquals(1, recipes.size());
+        List<Recipe> recipes = recipeDao.getByPropertyLike("name", "C");
+        assertEquals(2, recipes.size());
     }
 
     /**
-     * Gets by category id.
+     * Delete recipe does not delete user or category.
      */
     @Test
-    void getByCategoryId() {
-        RecipeDao recipeDao = new RecipeDao();
-        List<Recipe> appetizerRecipes = recipeDao.getByCategoryId(1);
-        assertNotNull(appetizerRecipes);
-        assertEquals(1, appetizerRecipes.size());
-        assertEquals("Caesar Salad", appetizerRecipes.get(0).getName());
+    void deleteRecipeDoesNotDeleteUserOrCategory() {
+        // Access an existing Recipe by its name
+        Recipe existingRecipe = recipeDao.getByPropertyEqual("name", "Caesar Salad").get(0);
+        assertNotNull(existingRecipe, "The recipe should exist before deletion");
+
+        // Ensure that the associated User and Category still exist
+        User userBeforeDelete = userDao.getById(existingRecipe.getUser().getId());
+        Category categoryBeforeDelete = categoryDao.getById(existingRecipe.getCategory().getId());
+        assertNotNull(userBeforeDelete, "User should still exist before deletion");
+        assertNotNull(categoryBeforeDelete, "Category should still exist before deletion");
+
+        // Delete the Recipe
+        recipeDao.delete(existingRecipe);
+
+        // Verify that the User and Category are still in the database after deleting the Recipe
+        User userAfterDelete = userDao.getById(existingRecipe.getUser().getId());
+        Category categoryAfterDelete = categoryDao.getById(existingRecipe.getCategory().getId());
+        assertNotNull(userAfterDelete, "User should still exist after deleting the recipe");
+        assertNotNull(categoryAfterDelete, "Category should still exist after deleting the recipe");
     }
+
 }

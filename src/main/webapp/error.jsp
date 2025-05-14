@@ -1,6 +1,6 @@
-<%@include file="head.jsp" %>
-<%@include file="taglib.jsp" %>
-<%@include file="nav.jsp" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<c:import url="head.jsp" />
+<c:import url="nav.jsp" />
 
 <html>
 <body>
@@ -10,9 +10,14 @@
             <div class="alert alert-danger text-center" role="alert">
                 <h1 class="mb-3">Oops! Something went wrong.</h1>
                 <p>
-                    <%= request.getAttribute("errorMessage") != null
-                            ? request.getAttribute("errorMessage")
-                            : "An unexpected error occurred." %>
+                    <c:choose>
+                        <c:when test="${not empty errorMessage}">
+                            ${errorMessage}
+                        </c:when>
+                        <c:otherwise>
+                            An unexpected error occurred.
+                        </c:otherwise>
+                    </c:choose>
                 </p>
             </div>
         </div>

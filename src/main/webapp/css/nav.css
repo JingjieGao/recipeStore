@@ -1,0 +1,28 @@
+header {
+    background-color: #e7f0f6;
+}
+
+h1 {
+    font-family: 'Garamond', serif;
+    font-weight: bold;
+    color: rgb(41, 41, 43);
+}
+.nav-link {
+    font-family: 'Garamond', serif;
+    color: rgb(76, 76, 78);
+}
+.nav-link:hover {
+    color: rgb(41, 41, 43);
+}
+.nav-item {
+    margin-right: 40px;
+}
+
+.nav-item:last-child {
+    margin-right: 0;
+}
+
+.dropdown-item {
+    font-family: 'Garamond', serif;
+    color: rgb(76, 76, 78);;
+}

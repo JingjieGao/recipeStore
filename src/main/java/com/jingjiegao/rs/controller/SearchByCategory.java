@@ -1,12 +1,17 @@
 package com.jingjiegao.rs.controller;
 
+import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
-import com.jingjiegao.rs.persistence.RecipeDao;
+import com.jingjiegao.rs.entity.User;
+import com.jingjiegao.rs.persistence.FavoriteDao;
+import com.jingjiegao.rs.persistence.GenericDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Search by category.
@@ -15,6 +20,10 @@ import java.util.List;
         urlPatterns = {"/searchByCategoryServlet"}
 )
 public class SearchByCategory extends HttpServlet {
+    private final FavoriteDao favoriteDao = new FavoriteDao();
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
+    private final GenericDao<Category> categoryDao = new GenericDao<>(Category.class);
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve the category ID from the query parameter
@@ -31,14 +40,30 @@ public class SearchByCategory extends HttpServlet {
             // Convert the category ID from String to int
             int categoryId = Integer.parseInt(categoryIdParam);
 
-            // Create a RecipeDao instance to interact with the database
-            RecipeDao recipeDao = new RecipeDao();
+            // Retrieve the Category object using categoryId
+            Category category = categoryDao.getById(categoryId);
 
-            // Get all recipes that match the provided category ID
-            List<Recipe> recipes = recipeDao.getByCategoryId(categoryId);
+            // Use the Category object to query corresponding Recipes
+            List<Recipe> recipes = recipeDao.getByPropertyEqual("category", category);
 
-            // Set the list of recipes and selected category ID as request attributes
+            // Create a map to store each recipe's favorite status
+            Map<Integer, Boolean> favoriteStatusMap = new HashMap<>();
+
+            // Check if the user is logged in to manage favorite status
+            HttpSession session = request.getSession(false);
+            User user = (User) session.getAttribute("user");
+
+            if (user != null) {
+                // Only fetch the favorite status if the user is logged in
+                for (Recipe recipe : recipes) {
+                    boolean isFavorited = favoriteDao.isRecipeFavoritedByUser(recipe.getId(), user.getId());
+                    favoriteStatusMap.put(recipe.getId(), isFavorited);
+                }
+            }
+
+            // Set recipes and other info to request attributes to send to JSP
             request.setAttribute("recipes", recipes);
+            request.setAttribute("favoriteStatusMap", favoriteStatusMap);
             request.setAttribute("selectedCategoryId", categoryId);
 
             // Forward the request to searchByCategory.jsp to display the results

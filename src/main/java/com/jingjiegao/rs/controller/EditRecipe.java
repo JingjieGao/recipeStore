@@ -2,14 +2,14 @@ package com.jingjiegao.rs.controller;
 
 import com.jingjiegao.rs.entity.Recipe;
 import com.jingjiegao.rs.entity.Category;
-import com.jingjiegao.rs.persistence.RecipeDao;
-import com.jingjiegao.rs.persistence.CategoryDao;
-
+import com.jingjiegao.rs.entity.User;
+import com.jingjiegao.rs.persistence.GenericDao;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The type Edit recipe.
@@ -18,21 +18,21 @@ import java.io.IOException;
         urlPatterns = {"/editRecipeServlet"}
 )
 public class EditRecipe extends HttpServlet {
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
+    private final GenericDao<Category> categoryDao = new GenericDao<>(Category.class);
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Parse recipe ID from the request
         int recipeId = Integer.parseInt(request.getParameter("recipe_id"));
 
-        // Create DAO instances
-        RecipeDao recipeDao = new RecipeDao();
-        CategoryDao categoryDao = new CategoryDao();
-
-        // Retrieve the recipe object by ID
+        // Retrieve the recipe and categories
         Recipe recipe = recipeDao.getById(recipeId);
+        List<Category> categories = categoryDao.getAll();
 
-        // Retrieve all categories for the dropdown list
+        // Set attributes to forward to the edit form
         request.setAttribute("recipe", recipe);
-        request.setAttribute("categories", categoryDao.getAll());
+        request.setAttribute("categories", categories);
 
         // Forward the request to the edit form JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("/editRecipe.jsp");
@@ -41,31 +41,37 @@ public class EditRecipe extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Parse form parameters
+        // Check if the user is logged in
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            // User not logged in, redirect to login page
+            response.sendRedirect("logIn");
+            return;
+        }
+
+        // Get form data
         int recipeId = Integer.parseInt(request.getParameter("recipe_id"));
+        int categoryId = Integer.parseInt(request.getParameter("category_id"));
         String name = request.getParameter("name");
         String ingredients = request.getParameter("ingredients");
         String instructions = request.getParameter("instructions");
-        int categoryId = Integer.parseInt(request.getParameter("category_id"));
 
-        // Create DAO instances
-        RecipeDao recipeDao = new RecipeDao();
-        CategoryDao categoryDao = new CategoryDao();
-
-        // Retrieve the existing recipe from the database
-        Recipe recipeToUpdate = recipeDao.getById(recipeId);
-
-        // Set updated values from the form
-        recipeToUpdate.setName(name);
-        recipeToUpdate.setIngredients(ingredients);
-        recipeToUpdate.setInstructions(instructions);
-
-        // Get and assign the selected category
+        // Get category from database
         Category category = categoryDao.getById(categoryId);
-        recipeToUpdate.setCategory(category);
+
+        // Retrieve the recipe to update
+        Recipe recipe = recipeDao.getById(recipeId);
+
+        // Update the recipe fields
+        recipe.setName(name);
+        recipe.setCategory(category);
+        recipe.setIngredients(ingredients);
+        recipe.setInstructions(instructions);
 
         // Update the recipe in the database
-        recipeDao.update(recipeToUpdate);
+        recipeDao.Update(recipe);
 
         // Set updated data in request scope for confirmation page
         request.setAttribute("recipeName", name);
