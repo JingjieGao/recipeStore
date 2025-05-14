@@ -2,13 +2,14 @@ package com.jingjiegao.rs.controller;
 
 import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.entity.Recipe;
-import com.jingjiegao.rs.persistence.CategoryDao;
-import com.jingjiegao.rs.persistence.RecipeDao;
+import com.jingjiegao.rs.entity.User;
+import com.jingjiegao.rs.persistence.GenericDao;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,8 +20,8 @@ import java.util.List;
         urlPatterns = {"/addRecipeServlet"}
 )
 public class AddRecipe extends HttpServlet {
-    private final RecipeDao recipeDao = new RecipeDao();
-    private final CategoryDao categoryDao = new CategoryDao();
+    private final GenericDao<Recipe> recipeDao = new GenericDao<>(Recipe.class);
+    private final GenericDao<Category> categoryDao = new GenericDao<>(Category.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,22 +37,36 @@ public class AddRecipe extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get recipe info from the form
+        // Check if the user is logged in
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            // User not logged in, redirect to login page
+            response.sendRedirect("logIn");
+            return;
+        }
+
+        // Get form data
         String name = request.getParameter("name");
         int categoryId = Integer.parseInt(request.getParameter("category_id"));
         String ingredients = request.getParameter("ingredients");
         String instructions = request.getParameter("instructions");
 
-        // Fetch the Category object from the database using the category ID
+        // Get category from database
         Category category = categoryDao.getById(categoryId);
 
-        // Create a new Recipe object with form data and associated category
-        Recipe recipe = new Recipe(name, category, ingredients, instructions);
+        // Create and save the recipe
+        Recipe recipe = new Recipe();
+        recipe.setName(name);
+        recipe.setCategory(category);
+        recipe.setUser(user);
+        recipe.setIngredients(ingredients);
+        recipe.setInstructions(instructions);
 
-        // Insert the recipe into the database and get generated ID
-        int recipeId = recipeDao.insert(recipe);
+        recipeDao.insert(recipe);
 
-        // Set recipe details in request scope to show on result page
+        // Set request attributes for result page
         request.setAttribute("recipeName", name);
         request.setAttribute("categoryName", category.getName());
         request.setAttribute("ingredients", ingredients);

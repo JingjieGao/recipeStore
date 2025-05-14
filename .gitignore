@@ -48,3 +48,12 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+### Secret ##
+/src/main/resources/
+/src/test/resources/
+src/main/resources/.env
+
+### DB ##
+!/src/main/resources/dump.sql
+!/src/test/resources/cleandb.sql

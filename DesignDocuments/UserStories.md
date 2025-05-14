@@ -20,6 +20,10 @@ As a user, I want to view information such as the dish name, category, ingredien
 
 As a user, I want to search for a recipe by name so that I can quickly find what I need.
 
+### Explore Recipes From an external API*
+
+As a user, I want to explore additional recipes retrieved from TheMealDB API so that I can discover new dishes.
+
 ### Category Recipes*
 
 As a registered user, I want to categorize my recipes so that I can easily organize them.

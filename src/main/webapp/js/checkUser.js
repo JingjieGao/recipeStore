@@ -1,7 +1,7 @@
 const form = document.getElementById('recipeForm');
 
 form.addEventListener('submit', function(event) {
-    if (!userName) {
+    if (!isLoggedIn) {
         event.preventDefault();
 
         const goToLogin = confirm("You must be logged in to submit a recipe.\n\nPress OK to go to login page.\nPress Cancel to return to home page.");

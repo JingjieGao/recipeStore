@@ -80,9 +80,9 @@
 - [ ] Implement Feedback from Week 14 review
 - [ ] Final Presentation
 - [ ] Create video, add video link to readme.md
-- [ ] Finalize all documentation
-- [ ] Code quality check
-- [ ] Update Time log
+- [X] Finalize all documentation
+- [X] Code quality check
+- [X] Update Time log
 
 ### Week 16
 - [ ] Weekly journal entry

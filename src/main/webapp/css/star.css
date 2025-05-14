@@ -1,0 +1,26 @@
+.star-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.star-button i {
+    font-size: 1.2rem;
+    color: gray;
+    transition: color 0.3s;
+}
+
+.star-button.favorited i {
+    color: gold;
+}
+
+.star-button:hover i {
+    color: orange;
+}
+
+.btn-link {
+    text-decoration: none;
+}

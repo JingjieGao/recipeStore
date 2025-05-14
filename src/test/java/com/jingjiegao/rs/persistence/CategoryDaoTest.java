@@ -5,7 +5,9 @@ import com.jingjiegao.rs.util.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,11 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * The type Category dao test.
  */
 class CategoryDaoTest {
-
-    /**
-     * The Category dao.
-     */
-    CategoryDao categoryDao;
+    private GenericDao<Category> categoryDao;
 
     /**
      * Sets up.
@@ -26,6 +24,7 @@ class CategoryDaoTest {
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
+        categoryDao = new GenericDao<>(Category.class);
     }
 
     /**
@@ -33,7 +32,7 @@ class CategoryDaoTest {
      */
     @Test
     void getById() {
-        categoryDao = new CategoryDao();
+        // id:1 name:Appetizer
         Category retrievedCategory = categoryDao.getById(1);
         assertNotNull(retrievedCategory);
         assertEquals("Appetizer", retrievedCategory.getName());
@@ -44,26 +43,26 @@ class CategoryDaoTest {
      */
     @Test
     void update() {
-        categoryDao = new CategoryDao();
-        Category categoryToUpdate = categoryDao.getById(1);
-        categoryToUpdate.setName("NameForTest");
-        categoryDao.update(categoryToUpdate);
-
-        Category actualCategory = categoryDao.getById(1);
-        assertEquals("NameForTest", actualCategory.getName());
+        // id:2 name:Entree
+        Category category = categoryDao.getById(2);
+        String originalName = category.getName();
+        category.setName("UpdatedName");
+        categoryDao.Update(category);
+        Category updated = categoryDao.getById(2);
+        assertEquals("UpdatedName", updated.getName());
     }
+
 
     /**
      * Insert.
      */
     @Test
     void insert() {
-        categoryDao = new CategoryDao();
-        Category categoryToInsert = new Category("NameForTest");
-        int insertedCategoryId = categoryDao.insert(categoryToInsert);
-        assertNotEquals(0, insertedCategoryId);
-        Category insertedCategory = categoryDao.getById(insertedCategoryId);
-        assertEquals("NameForTest", insertedCategory.getName());
+        Category newCategory = new Category("TestCategory");
+        int id = categoryDao.insert(newCategory);
+        assertNotEquals(0, id);
+        Category inserted = categoryDao.getById(id);
+        assertEquals("TestCategory", inserted.getName());
     }
 
     /**
@@ -71,9 +70,12 @@ class CategoryDaoTest {
      */
     @Test
     void delete() {
-        categoryDao = new CategoryDao();
-        categoryDao.delete(categoryDao.getById(2));
-        assertNull(categoryDao.getById(2));
+        Category newCategory = new Category("ToBeDeleted");
+        int id = categoryDao.insert(newCategory);
+        Category toDelete = categoryDao.getById(id);
+        assertNotNull(toDelete);
+        categoryDao.delete(toDelete);
+        assertNull(categoryDao.getById(id));
     }
 
     /**
@@ -81,9 +83,10 @@ class CategoryDaoTest {
      */
     @Test
     void getAll() {
-        categoryDao = new CategoryDao();
         List<Category> categories = categoryDao.getAll();
-        assertEquals(4, categories.size());
+        assertNotNull(categories);
+        // Appetizer, Entree, Dessert, Beverage, and Other
+        assertEquals(5, categories.size());
     }
 
     /**
@@ -91,10 +94,25 @@ class CategoryDaoTest {
      */
     @Test
     void getByPropertyEqual() {
-        categoryDao = new CategoryDao();
-        List<Category> categories = categoryDao.getByPropertyLike("name", "Appetizer");
+        List<Category> categories = categoryDao.getByPropertyEqual("name", "Appetizer");
         assertEquals(1, categories.size());
         assertEquals(1, categories.get(0).getId());
+    }
+
+    /**
+     * Find by property equal.
+     */
+    @Test
+    void findByPropertyEqual() {
+        Map<String, Object> filter = new HashMap<>();
+        filter.put("name", "Appetizer");
+
+        List<Category> results = categoryDao.findByPropertyEqual(filter);
+
+        assertEquals(1, results.size());
+        Category category = results.get(0);
+        assertEquals("Appetizer", category.getName());
+        assertEquals(1, category.getId());
     }
 
     /**
@@ -102,9 +120,7 @@ class CategoryDaoTest {
      */
     @Test
     void getByPropertyLike() {
-        categoryDao = new CategoryDao();
         List<Category> categories = categoryDao.getByPropertyLike("name", "B");
         assertEquals(1, categories.size());
     }
-
 }
