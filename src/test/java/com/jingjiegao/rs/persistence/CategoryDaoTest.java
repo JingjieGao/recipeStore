@@ -4,7 +4,11 @@ import com.jingjiegao.rs.entity.Category;
 import com.jingjiegao.rs.util.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -93,6 +97,22 @@ class CategoryDaoTest {
         List<Category> categories = categoryDao.getByPropertyEqual("name", "Appetizer");
         assertEquals(1, categories.size());
         assertEquals(1, categories.get(0).getId());
+    }
+
+    /**
+     * Find by property equal.
+     */
+    @Test
+    void findByPropertyEqual() {
+        Map<String, Object> filter = new HashMap<>();
+        filter.put("name", "Appetizer");
+
+        List<Category> results = categoryDao.findByPropertyEqual(filter);
+
+        assertEquals(1, results.size());
+        Category category = results.get(0);
+        assertEquals("Appetizer", category.getName());
+        assertEquals(1, category.getId());
     }
 
     /**
