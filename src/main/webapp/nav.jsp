@@ -1,9 +1,13 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!-- navigation for all page -->
-<header class="bg-light py-3 shadow-sm mb-4">
-    <div class="container d-flex justify-content-between align-items-center">
-        <h1 class="h3 m-0">Recipe Store</h1>
-        <nav>
-            <ul class="nav">
+<header class="py-3 mb-4">
+    <div class="container">
+        <h1 class="text-center mb-4">Recipe Store</h1>
+
+        <nav class="d-flex justify-content-between align-items-center">
+            <ul class="nav d-flex justify-content-start">
+                <!-- Home Link -->
                 <li class="nav-item"><a class="nav-link" href="index.jsp">Home</a></li>
 
                 <!-- Category Dropdown -->
@@ -28,13 +32,15 @@
 
                 <!-- New Recipe Search Page Link -->
                 <li class="nav-item"><a class="nav-link" href="newRecipeSearch.jsp">Explore</a></li>
+            </ul>
 
+            <!-- Login Link -->
+            <ul class="nav d-flex justify-content-end">
                 <c:if test="${empty sessionScope.user.username}">
                     <li class="nav-item"><a class="nav-link" href="logIn">Login</a></li>
                 </c:if>
-
                 <c:if test="${not empty sessionScope.user.username}">
-                    <li class="nav-item disabled"><span class="nav-link">${sessionScope.user.username}</span></li>
+                    <li class="nav-item disabled"><span class="nav-link">Welcome ${sessionScope.user.username}</span></li>
                 </c:if>
             </ul>
         </nav>

@@ -1,6 +1,6 @@
-<%@include file="head.jsp" %>
-<%@include file="taglib.jsp" %>
-<%@include file="nav.jsp" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<c:import url="head.jsp" />
+<c:import url="nav.jsp" />
 
 <html>
 <body>
@@ -57,6 +57,6 @@
 <script>
     const isLoggedIn = ${user != null};
 </script>
-<script src="JS/checkUser.js"></script>
+<script src="js/checkUser.js"></script>
 </body>
 </html>

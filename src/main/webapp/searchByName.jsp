@@ -1,6 +1,6 @@
-<%@include file="head.jsp" %>
-<%@include file="taglib.jsp" %>
-<%@include file="nav.jsp" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<c:import url="head.jsp" />
+<c:import url="nav.jsp" />
 
 <html>
 <body>
@@ -18,9 +18,9 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm position-relative">
                         <div class="card-body">
-                            <h5 class="card-title text-primary">${recipe.name}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                Category: <c:out value="${recipe.category.name}"/>
+                            <h5 class="card-title text-center fw-bold">${recipe.name}</h5>
+                            <h6 class="card-subtitle mt-3 mb-3">
+                                <strong>Category:</strong> <c:out value="${recipe.category.name}"/>
                             </h6>
                             <p class="card-text">
                                 <strong>Ingredients:</strong><br/>

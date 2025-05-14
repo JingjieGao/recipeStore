@@ -27,8 +27,11 @@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
     <!--Favorite Button Style-->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/star.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/star.css">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Navigation Style-->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/nav.css">
 </head>
