@@ -18,7 +18,7 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title text-center fw-bold">${favorite.recipe.category.name}</h5>
+                            <h5 class="card-title text-center fw-bold">${favorite.recipe.name}</h5>
                             <h6 class="card-subtitle mt-3 mb-3">
                                 <strong>Category:</strong> <c:out value="${favorite.recipe.category.name}"/>
                             </h6>
