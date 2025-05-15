@@ -42,4 +42,6 @@ Screenshots from the 101 Cookbooks:
 
 ### [Time Log](TimeLog.md)
 
-
+### Presentation Link
+* [Project demo](https://youtu.be/zXMaAjVuPWM?si=Jjxf7fHo2qWKrMKh)
+* [Project code](https://youtu.be/enMYeHDPNXk?si=smNCJi2UUwn2J0Yy)
